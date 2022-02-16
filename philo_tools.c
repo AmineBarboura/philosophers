@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 17:57:52 by abarbour          #+#    #+#             */
-/*   Updated: 2022/01/27 23:15:10 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 00:04:08 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,41 +21,56 @@ long int	get_timestamp(void)
 	return (-1);
 }
 
-void	print_timestamp_ms(t_philo_table *table)
+long int	timestamp_ms(t_philo_table *table)
 {
 	long int	now;
-	char		*str;
 
 	now = get_timestamp();
-	str = ft_itoa((int)((now - table->exec_time) / 1000));
-	write(1, str, ft_strlen(str));
-	write(1, "ms\n", 3);
-	free(str);
+	return ((now - table->exec_time) / 1000);
 }
 
-int	free_forks(t_philo **philos, int index)
+int	free_forks(t_philo *philos, int index)
 {
 	int	i;
 
 	i = 0;
 	while (i < index)
 	{
-		free(philos[i]->right_fork);
+		free(philos[i].left_fork);
 		i++;
 	}
 	return (1);
 }
 
-int	free_philos_table(t_philo_table *table)
+void	print_action(t_philo_table *table, int id, char *action)
+{
+	pthread_mutex_lock(&table->print_mutex);
+	if (table->someone_died == 0)
+	{
+		ft_putnbr(timestamp_ms(table));
+		write(1, " ms\t", 4);
+		ft_putnbr(id);
+		write(1, " ", 1);
+		write(1, action, ft_strlen(action));
+		write(1, "\n", 1);
+	}
+	pthread_mutex_unlock(&table->print_mutex);
+}
+
+void	destroy_all_mutex(t_philo_table *table)
 {
 	int	i;
 
 	i = 0;
-	while (i < table->philo_nb && table->philosophers[i])
+	while (i < table->philo_nb)
 	{
-		free(table->philosophers[i]);
+		pthread_mutex_destroy(table->philosophers[i].left_fork);
+		pthread_mutex_destroy(&table->philosophers[i].eating);
+		pthread_mutex_destroy(&table->philosophers[i].count_meals);
 		i++;
 	}
-	free(table->philosophers);
-	return (1);
+	pthread_mutex_destroy(&table->print_mutex);
+	pthread_mutex_destroy(&table->order);
+	pthread_mutex_destroy(&table->out);
+	pthread_mutex_destroy(&table->death);
 }
