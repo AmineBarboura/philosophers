@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 21:39:41 by abarbour          #+#    #+#             */
-/*   Updated: 2022/02/16 23:53:08 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 08:52:18 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ struct		s_philo_table
 	pthread_mutex_t	order;
 	pthread_mutex_t	death;
 	pthread_mutex_t	out;
+	pthread_mutex_t	done_eating;
 	long int		exec_time;
 };
 typedef struct s_philo_table	t_philo_table;
@@ -73,5 +74,6 @@ int			done_eating(t_philo *p);
 int			check_death(t_philo_table *table);
 int			check_out(t_philo_table *table);
 int			check_time_to_die(t_philo *philo);
+int			check_done_eating(t_philo_table *table);
 
 #endif

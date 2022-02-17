@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 17:57:52 by abarbour          #+#    #+#             */
-/*   Updated: 2022/02/17 00:04:08 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 08:48:17 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	destroy_all_mutex(t_philo_table *table)
 	}
 	pthread_mutex_destroy(&table->print_mutex);
 	pthread_mutex_destroy(&table->order);
+	pthread_mutex_destroy(&table->done_eating);
 	pthread_mutex_destroy(&table->out);
 	pthread_mutex_destroy(&table->death);
 }

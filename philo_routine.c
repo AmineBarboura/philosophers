@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 23:16:29 by abarbour          #+#    #+#             */
-/*   Updated: 2022/02/17 00:13:56 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 08:51:52 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	*routine(void *p)
 		else if (philo->state == 1)
 		{
 			eating(philo);
-			if (philo->number_meals == philo->table->nb_max_meals)
+			if (done_eating(philo))
 				break ;
 		}
 		else if (philo->state == 2)
@@ -46,10 +46,14 @@ void	*death_angel(void *p)
 	while (!check_death(philo->table))
 	{
 		if (done_eating(philo))
+		{
+			pthread_mutex_lock(&philo->table->done_eating);
 			philo->table->philos_done_eating++;
+			pthread_mutex_unlock(&philo->table->done_eating);
+		}
 		else if (check_time_to_die(philo))
 			break ;
-		if (philo->table->philos_done_eating == philo->table->nb_max_meals)
+		if (check_done_eating(philo->table))
 			break ;
 	}
 	return (0);

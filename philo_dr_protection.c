@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 20:29:05 by abarbour          #+#    #+#             */
-/*   Updated: 2022/02/17 00:09:00 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 08:58:34 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	check_death(t_philo_table *table)
 	int	ret;
 
 	ret = 0;
-	usleep(100);
 	pthread_mutex_lock(&table->death);
 	if (table->someone_died)
 		ret = 1;
@@ -54,6 +53,7 @@ int	check_time_to_die(t_philo *philo)
 	int	ret;
 
 	ret = 0;
+	usleep(100);
 	pthread_mutex_lock(&philo->eating);
 	if (get_timestamp() - philo->last_time_eating
 		>= philo->table->time_to_die * 1000)
@@ -62,5 +62,18 @@ int	check_time_to_die(t_philo *philo)
 		ret = 1;
 	}
 	pthread_mutex_unlock(&philo->eating);
+	return (ret);
+}
+
+int	check_done_eating(t_philo_table *table)
+{
+	int	ret;
+
+	ret = 0;
+	usleep(100);
+	pthread_mutex_lock(&table->done_eating);
+	if (table->philos_done_eating == table->nb_max_meals)
+		ret = 1;
+	pthread_mutex_unlock(&table->done_eating);
 	return (ret);
 }

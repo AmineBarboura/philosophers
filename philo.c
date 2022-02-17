@@ -6,7 +6,7 @@
 /*   By: abarbour <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 21:37:43 by abarbour          #+#    #+#             */
-/*   Updated: 2022/02/16 23:57:49 by abarbour         ###   ########.fr       */
+/*   Updated: 2022/02/17 08:47:45 by abarbour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	init_table(t_philo_table *table, int ac, char **av)
 		table->nb_max_meals = ft_atoi(av[5]);
 	if (pthread_mutex_init(&table->print_mutex, NULL)
 		|| pthread_mutex_init(&table->order, NULL)
+		|| pthread_mutex_init(&table->done_eating, NULL)
 		|| pthread_mutex_init(&table->out, NULL)
 		|| pthread_mutex_init(&table->death, NULL))
 		return (1);
